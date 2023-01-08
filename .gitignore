@@ -1,0 +1,155 @@
+#include <stdio.h>
+#include <stdlib.h>
+struct node {
+	int x;
+	struct node *next;
+};
+struct node *head=NULL;
+struct node *tail=NULL;
+
+int addNote(int data) {
+	if (head==NULL) {
+		struct node *new=(struct node*)malloc(sizeof(struct node));
+		new->x=data;
+		new->next=NULL;
+		head=tail=new;
+	}
+	else {
+		struct node *new=(struct node*)malloc(sizeof(struct node));
+		new->x=data;
+		new->next=NULL;
+		tail->next=new;
+		tail=new;
+	}
+}
+
+int addNoteHead(int data) {
+	if (head==NULL) {
+		struct node *new=(struct node*)malloc(sizeof(struct node));
+		new->x=data;
+		new->next=NULL;
+		head=tail=new;
+	}
+	else {
+		struct node *new=(struct node*)malloc(sizeof(struct node));
+		new->x=data;
+		new->next=head;
+		head=new;
+	}
+}
+
+int addNoteIndex (int data,int x) {
+	if (x==0) {
+		addNoteHead(data);
+	}
+	else {
+		struct node *prev=(struct node*)malloc(sizeof(struct node));
+		struct node *index=head;
+		int i;
+		for (i=1;i<x;i++) {
+			index=index->next;
+		}
+		if (index->next==NULL) {
+			addNote(data);
+		}
+		else {
+		prev->x=data;
+		prev->next=index->next;
+		index->next=prev;
+		}
+	}
+}
+
+int removeFirst () {
+	struct node *temp=head;
+	head=head->next;
+	free(temp);
+}
+
+int removeLast () {
+	struct node *prev=NULL;
+	struct node *index=head;
+	while (index->next!=NULL) {
+		prev=index;
+		index=index->next;
+	}
+	prev->next=index->next;
+	tail=prev;
+	free(index);
+}
+
+int deleteNumber (int data) {
+	
+	struct node *index=head;
+	struct node *prev=NULL;
+	
+	if (head==NULL) {
+		printf("Linked list bos");
+		return 1;
+	}
+	
+	if (head->x==data) {
+		struct node *temp=head;
+		head=head->next;
+		free(temp);
+		return 1;
+	}
+
+	while (index!=NULL && index->x!=data) {
+		prev=index;
+		index=index->next;
+	}
+	
+	if (index==NULL) {
+		printf("%d bulunamadi\n",data);
+		return 1;
+	}
+	
+	prev->next=index->next;
+	
+	if (tail->x==data) {
+		tail=prev;
+	}
+	
+	free(index);
+}
+void print() {
+	struct node *current=head;
+	while (current!=NULL) {
+		printf("%d ",current->x);
+		current=current->next;
+	}
+}
+
+int main () {
+	addNote(12);
+	addNote(13);
+	addNote(14);
+	addNote(15);
+	addNote(16);
+	addNote(17);
+	addNote(18);
+	addNote(14);
+	addNote(19);
+	addNote(9995);
+	addNote(23);
+	addNote(24);
+	print();
+	printf("\n");
+	deleteNumber(14);
+	print();
+	printf("\n");
+	removeLast();
+	print();
+	printf("\n");
+	addNoteIndex(99,3);
+	print();
+	printf("\n");
+	addNoteIndex(124,8);
+	print();
+	printf("\n");
+	addNoteIndex(7,5);
+	print();
+	return 1;
+}
+
